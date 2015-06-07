@@ -1,5 +1,6 @@
 package de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.platzverkauf;
 
+import java.util.Observable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Set;
@@ -9,7 +10,6 @@ import javax.swing.JPanel;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Platz;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kinosaal;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Vorstellung;
-import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.ObservableWerkzeug;
 
 /**
  * Mit diesem Werkzeug können Plätze verkauft und storniert werden. Es arbeitet
@@ -22,7 +22,7 @@ import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.ObservableWerkzeug;
  * @author SE2-Team
  * @version SoSe 2015
  */
-public class PlatzVerkaufsWerkzeug extends ObservableWerkzeug
+public class PlatzVerkaufsWerkzeug extends Observable
 {
     // Die aktuelle Vorstellung, deren Plätze angezeigt werden. Kann null sein.
     private Vorstellung _vorstellung;

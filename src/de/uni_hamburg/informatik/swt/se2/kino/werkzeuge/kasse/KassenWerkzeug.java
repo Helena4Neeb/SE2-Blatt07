@@ -1,5 +1,8 @@
 package de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.kasse;
 
+
+import java.util.Observable;
+import java.util.Observer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -7,7 +10,6 @@ import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kino;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Tagesplan;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Vorstellung;
-import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.WerkzeugObserver;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.datumsauswaehler.DatumAuswaehlWerkzeug;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.platzverkauf.PlatzVerkaufsWerkzeug;
 import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.vorstellungsauswaehler.VorstellungsAuswaehlWerkzeug;
@@ -20,7 +22,7 @@ import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.vorstellungsauswaehler.V
  * @author SE2-Team
  * @version SoSe 2015
  */
-public class KassenWerkzeug implements WerkzeugObserver
+public class KassenWerkzeug implements Observer
 {
     // Das Material dieses Werkzeugs
     private Kino _kino;
@@ -59,8 +61,8 @@ public class KassenWerkzeug implements WerkzeugObserver
         registriereUIAktionen();
         setzeTagesplanFuerAusgewaehltesDatum();
         setzeAusgewaehlteVorstellung();
-        _datumAuswaehlWerkzeug.registriereBeobachter(this);
-        _vorstellungAuswaehlWerkzeug.registriereBeobachter(this);
+        _datumAuswaehlWerkzeug.addObserver(this);
+        _vorstellungAuswaehlWerkzeug.addObserver(this);
 
         _ui.zeigeFenster();
     }
@@ -123,19 +125,18 @@ public class KassenWerkzeug implements WerkzeugObserver
         return _vorstellungAuswaehlWerkzeug.getAusgewaehlteVorstellung();
     }
 
-    @Override
-    public void reagiereAufAenderung(String argument)
-    {
-        switch(argument)
-        {
-            case "Datum":
-                setzeTagesplanFuerAusgewaehltesDatum();
-                break;   
-            
-            case "Vorstellung":
-                setzeAusgewaehlteVorstellung();
-                break;
-            default:
-        }
-    }
+
+	@Override
+	public void update(Observable obs, Object arg) 
+	{
+		if (obs instanceof DatumAuswaehlWerkzeug)
+		{
+			setzeTagesplanFuerAusgewaehltesDatum();
+		}
+		
+		if (obs instanceof VorstellungsAuswaehlWerkzeug)
+		{
+			setzeAusgewaehlteVorstellung();
+		}
+	}
 }

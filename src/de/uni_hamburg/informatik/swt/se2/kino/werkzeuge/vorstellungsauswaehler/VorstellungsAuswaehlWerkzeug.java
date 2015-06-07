@@ -1,5 +1,6 @@
 package de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.vorstellungsauswaehler;
 
+import java.util.Observable;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -8,7 +9,6 @@ import javax.swing.event.ListSelectionListener;
 
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Tagesplan;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Vorstellung;
-import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.ObservableWerkzeug;
 
 /**
  * Mit diesem Werkzeug kann der Benutzer oder die Benutzerin eine Vorstellung
@@ -17,13 +17,12 @@ import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.ObservableWerkzeug;
  * Dieses Werkzeug ist ein eingebettetes Subwerkzeug. Es benachrichtigt seine
  * Beobachter, wenn sich die ausgewählte Vorstellung geändert hat.
  */
-public class VorstellungsAuswaehlWerkzeug extends ObservableWerkzeug
+public class VorstellungsAuswaehlWerkzeug extends Observable
 {
     private VorstellungsAuswaehlWerkzeugUI _ui;
 
     // Das Material dieses Werkzeugs
     private Tagesplan _tagesplan;
-    private final String _argument = "Vorstellung";
 
     /**
      * Initialisiert das Werkzeug.
@@ -39,7 +38,7 @@ public class VorstellungsAuswaehlWerkzeug extends ObservableWerkzeug
      */
     private void vorstellungWurdeAusgewaehlt()
     {
-        informiereUeberAenderung(_argument);
+        informiereUeberAenderung();
     }
 
     /**
@@ -119,5 +118,15 @@ public class VorstellungsAuswaehlWerkzeug extends ObservableWerkzeug
                         }
                     }
                 });
+    }
+    /**
+     * Informiert alle an diesem Subwerkzeug 
+     * registrierten Beobachter über eine
+     * Änderung.
+     */
+    private void informiereUeberAenderung()
+    {
+    	setChanged();
+    	notifyObservers(this);
     }
 }

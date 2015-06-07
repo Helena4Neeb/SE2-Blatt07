@@ -1,12 +1,12 @@
 package de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.datumsauswaehler;
 
+import java.util.Observable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Datum;
-import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.ObservableWerkzeug;
 
 /**
  * Mit diesem Werkzeug kann ein Datum ausgewählt werden.
@@ -17,11 +17,10 @@ import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.ObservableWerkzeug;
  * @author SE2-Team
  * @version SoSe 2015
  */
-public class DatumAuswaehlWerkzeug extends ObservableWerkzeug
+public class DatumAuswaehlWerkzeug extends Observable
 {
     private DatumAuswaehlWerkzeugUI _ui;
     private Datum _ausgewaehltesDatum;
-    private final String _argument = "Datum";
 
     /**
      * Initialisiert dieses Werkzeug. Das initial ausgewählte Datum ist der
@@ -43,7 +42,7 @@ public class DatumAuswaehlWerkzeug extends ObservableWerkzeug
         _ausgewaehltesDatum = _ausgewaehltesDatum.vorherigerTag();
         _ui.getDatumLabel()
                 .setText(_ausgewaehltesDatum.getFormatiertenString());
-        informiereUeberAenderung(_argument);
+        informiereUeberAenderung();
     }
 
     /**
@@ -54,7 +53,7 @@ public class DatumAuswaehlWerkzeug extends ObservableWerkzeug
         _ausgewaehltesDatum = _ausgewaehltesDatum.naechsterTag();
         _ui.getDatumLabel()
                 .setText(_ausgewaehltesDatum.getFormatiertenString());
-        informiereUeberAenderung(_argument);
+        informiereUeberAenderung();
     }
 
     /**
@@ -101,5 +100,16 @@ public class DatumAuswaehlWerkzeug extends ObservableWerkzeug
                 weiterButtonWurdeGedrueckt();
             }
         });
+    }
+    
+    /**
+     * Informiert alle an diesem Subwerkzeug 
+     * registrierten Beobachter über eine
+     * Änderung. 
+     */
+    private void informiereUeberAenderung()
+    {
+    	setChanged();
+    	notifyObservers(this);
     }
 }
